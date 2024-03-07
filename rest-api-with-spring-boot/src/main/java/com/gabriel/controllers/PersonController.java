@@ -1,69 +1,34 @@
 package com.gabriel.controllers;
 
-import com.gabriel.exceptions.UnsupportedMathOperationException;
-import org.springframework.web.bind.annotation.*;
+import com.gabriel.models.Person;
+import com.gabriel.services.PersonServices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.atomic.AtomicLong;
-
-import static com.gabriel.converter.MathParamsConverter.convertDouble;
-import static com.gabriel.converter.MathParamsConverter.isNumeric;
-
+import java.util.List;
 
 @RestController
-public class MathController {
+@RequestMapping("/person")
+public class PersonController {
 
-    private AtomicLong counter = new AtomicLong();
+    @Autowired
+    private PersonServices service;
 
-    //URL e método de soma
-    @RequestMapping(value = "/sum/{numberOne}/{numberTwo}", method = RequestMethod.GET)
-    public double sum(
-            @PathVariable(value = "numberOne") String numberOne,
-            @PathVariable(value = "numberTwo") String numberTwo
-    ) throws Exception{
-
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-        }
-        return convertDouble(numberOne) + convertDouble(numberTwo);
+    @RequestMapping(method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Person> findAll(){
+        return service.findAll();
     }
 
-    //URL e método de subtração
-    @RequestMapping(value = "/subtraction/{numberOne}/{numberTwo}", method = RequestMethod.GET)
-    public double subtraction(
-            @PathVariable(value = "numberOne") String numberOne,
-            @PathVariable(value = "numberTwo") String numberTwo
-    ) throws Exception{
-
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-        }
-        return convertDouble(numberOne) - convertDouble(numberTwo);
-    }
-
-    //URL e método de multiplicação
-    @RequestMapping(value = "/multiplication/{numberOne}/{numberTwo}", method = RequestMethod.GET)
-    public double multiplication(
-            @PathVariable(value = "numberOne") String numberOne,
-            @PathVariable(value = "numberTwo") String numberTwo
-    ) throws Exception{
-
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-        }
-        return convertDouble(numberOne) * convertDouble(numberTwo);
-    }
-
-    //URL e método de divisão
-    @RequestMapping(value = "/division/{numberOne}/{numberTwo}", method = RequestMethod.GET)
-    public double division(
-            @PathVariable(value = "numberOne") String numberOne,
-            @PathVariable(value = "numberTwo") String numberTwo
-    ) throws Exception{
-
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-        }
-        return convertDouble(numberOne) / convertDouble(numberTwo);
+    @RequestMapping(value = "/{id}",
+                    method = RequestMethod.GET,
+                    produces = MediaType.APPLICATION_JSON_VALUE)
+    public Person findById(@PathVariable(value = "id") String id){
+        return service.findById(id);
     }
 
 }
