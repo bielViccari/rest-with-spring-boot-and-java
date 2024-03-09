@@ -1,20 +1,33 @@
 package com.gabriel.models;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "person")
 public class Person implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
-    private long id;
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "first_name", nullable = false, length = 80)
+    private String firstName;
+    @Column(name = "last_name", nullable = false, length = 80)
     private String lastName;
+    @Column(nullable = false, length = 100)
     private String address;
+    @Column(nullable = false, length = 6)
     private String gender;
 
-    public Person() {}
+    public Person() {
+    }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -22,12 +35,12 @@ public class Person implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -54,16 +67,30 @@ public class Person implements Serializable {
         this.gender = gender;
     }
 
+    // Sobrescreve o método equals para comparar objetos da classe Person
     @Override
     public boolean equals(Object o) {
+        // Verifica se as referências dos objetos são iguais, economizando tempo
         if (this == o) return true;
+
+        // Verifica se o objeto passado é nulo ou pertence a uma classe diferente
         if (o == null || getClass() != o.getClass()) return false;
+
+        // Converte o objeto genérico para a classe Person para acessar seus campos
         Person person = (Person) o;
-        return id == person.id && Objects.equals(name, person.name) && Objects.equals(lastName, person.lastName) && Objects.equals(address, person.address) && Objects.equals(gender, person.gender);
+
+        // Compara os campos individuais usando equals e retorna o resultado da comparação
+        return id == person.id &&
+                Objects.equals(firstName, person.firstName) &&
+                Objects.equals(lastName, person.lastName) &&
+                Objects.equals(address, person.address) &&
+                Objects.equals(gender, person.gender);
     }
 
+    // Sobrescreve o método hashCode para gerar um código de hash para objetos da classe Person
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, lastName, address, gender);
+        // Gera o código de hash combinando os códigos de hash dos campos relevantes usando Objects.hash
+        return Objects.hash(id, firstName, lastName, address, gender);
     }
 }
