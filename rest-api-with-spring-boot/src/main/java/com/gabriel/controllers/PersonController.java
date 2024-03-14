@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController //saying to spring, that class are a controller.
-@RequestMapping("/person") //all routes of this controller starts with /person
+@RequestMapping("/api/person/v1") //all routes of this controller starts with /person
 public class PersonController {
 
     @Autowired
